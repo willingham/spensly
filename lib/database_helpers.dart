@@ -4,6 +4,12 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
+Future<String> get imageDirectory async {
+  final String directory = "expenses";
+  final documentsDirectory = await getApplicationDocumentsDirectory();
+  return join(documentsDirectory.path, directory);
+}
+
 
 
 final expenseCategories = {
@@ -175,6 +181,13 @@ class DatabaseHelper {
     return [];
   }
 
-  // TODO: delete(int id)
+  Future<int> delete(int id) async {
+    Database db = await database;
+    int numDeleted = await db.delete(tableExpense,
+         where: '$columnId = ?', whereArgs: [id]
+    );
+    return numDeleted;
+  }
+
   // TODO: update(Word word)
 }

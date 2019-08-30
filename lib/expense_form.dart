@@ -1,7 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:spensly/camera.dart';
 import 'package:spensly/database_helpers.dart';
+import 'package:path/path.dart' show join;
+
+
+import 'package:camera/camera.dart';
+
 
 
 class ExpenseDialog extends StatefulWidget {
@@ -22,12 +31,24 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
   final _formKey = GlobalKey<FormState>();
   final Expense expense;
   _ExpenseDialogState({this.expense});
+  File imageFile = null;  
 
   @override
   initState() {
     super.initState();
     if (expense.date == null) {
       expense.date = DateTime.now();
+    }
+    setImageFile();
+  }
+
+  void setImageFile() async {
+    if (expense.filename != "") {
+      final photoDirectory = await imageDirectory;
+      setState(() {
+        imageFile = File(join(photoDirectory, expense.filename));
+      });
+      
     }
   }
 
@@ -45,6 +66,29 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
 
   @override
   Widget build(BuildContext context) {
+
+    void takePhoto() async {
+      final cameras = await availableCameras();
+
+      // Get a specific camera from the list of available cameras.
+      final firstCamera = cameras.first;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TakePictureScreen(
+            camera: firstCamera,
+            onPhotoTaken: (filename) async {
+              // @TODO: Check delete existing image if exists
+              await setState(() =>
+                  expense.filename = filename);
+              setImageFile();
+
+            },
+          ),
+        ),
+      );               
+    }
+
     return AlertDialog(
       content: Form(
         key: _formKey,
@@ -125,10 +169,28 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
                 ]
               ),
             ),
+
+            // photo area
+            GestureDetector(
+              onTap: () => takePhoto(),
+              child: Container(
+                width: 100.0,
+                height: 150.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  color: Colors.redAccent,
+                ),
+                child: imageFile != null
+                  ? Image.file(imageFile)
+                  : Center(child: Icon(Icons.camera))
+              )
+            ),
+
+            // create button
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: RaisedButton(
-                child: Text("Submit"),
+                child: Text("Create"),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();

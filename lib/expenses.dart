@@ -112,11 +112,32 @@ class _SpenslyState extends State<Spensly> {
                 return Divider(color: Colors.black);
               },
               itemBuilder: (BuildContext ctxt, int index) {
-                return new ListTile(
-                  leading: Icon(expenseCategories[_expenses[index].category]['icon']),
-                  title: Text(_expenses[index].name),
-                  subtitle: Text(_expenses[index].vendor),
-                  trailing: Text("\$${_expenses[index].amount.toString()}"),
+                return Dismissible(
+                  background: Container(color: Colors.red),
+                  // Each Dismissible must contain a Key. Keys allow Flutter to
+                  // uniquely identify widgets.
+                  key: Key(_expenses[index].id.toString()),
+                  // Provide a function that tells the app
+                  // what to do after an item has been swiped away.
+                  onDismissed: (direction) async {
+                    // Remove the item from the data source.
+                    int removed = await _db.delete(_expenses[index].id);
+                    if (removed > 0) {
+                      setState(() {
+                        _expenses.removeAt(index);
+                      });
+                    }
+                  },
+                  child: ListTile(
+                    onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => ExpenseDialog(expense: _expenses[index], onSubmit: submitForm,)
+                    ),//createExpense(),,
+                    leading: Icon(expenseCategories[_expenses[index].category]['icon']),
+                    title: Text(_expenses[index].name),
+                    subtitle: Text(_expenses[index].vendor),
+                    trailing: Text("\$${_expenses[index].amount.toString()}"),
+                  )
                 );
               }
             )
