@@ -54,7 +54,19 @@ class _SpenslyState extends State<Spensly> {
     });
   }
 
-  void createExpense() {
+  void updateExpense(Expense expense, int index) {
+    // update db
+    _db.update(expense).then((int i) {
+      // update local state
+      List<Expense> expenses = _expenses;
+      expenses[index] = expense; 
+      setState(() {
+        _expenses = sortExpenses(expenses);
+      });
+    });
+  }
+
+  void testCreateExpense() {
     Expense e = new Expense();
     e.name = 'Lunch';
     e.amount = 123.00;
@@ -66,7 +78,7 @@ class _SpenslyState extends State<Spensly> {
     addExpense(e);
   }
 
-  void submitForm(Expense expense) {
+  void submitForm(Expense expense, int index) {
     debugPrint('herer');
     if (expense.id == null) {
       // create expense
@@ -74,7 +86,8 @@ class _SpenslyState extends State<Spensly> {
       debugPrint("created expense ${expense.name}");
     } else {
       // update expense
-      debugPrint("Update expense not yet implemented");
+      updateExpense(expense, index);
+      debugPrint("Updated expense ${expense.name}");
 
     }
   }
@@ -131,7 +144,7 @@ class _SpenslyState extends State<Spensly> {
                   child: ListTile(
                     onTap: () => showDialog(
                       context: context,
-                      builder: (context) => ExpenseDialog(expense: _expenses[index], onSubmit: submitForm,)
+                      builder: (context) => ExpenseDialog(expense: _expenses[index], onSubmit: submitForm, index: index)
                     ),//createExpense(),,
                     leading: Icon(expenseCategories[_expenses[index].category]['icon']),
                     title: Text(_expenses[index].name),

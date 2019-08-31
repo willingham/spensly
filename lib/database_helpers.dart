@@ -189,5 +189,9 @@ class DatabaseHelper {
     return numDeleted;
   }
 
-  // TODO: update(Word word)
+  Future<int> update(Expense expense) async {
+    Database db = await database;
+    return await db.update(tableExpense, expense.toMap(),
+        where: '$columnId = ?', whereArgs: [expense.id]);
+  }
 }

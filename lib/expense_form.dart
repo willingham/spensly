@@ -18,10 +18,12 @@ class ExpenseDialog extends StatefulWidget {
     Key key,
     this.onSubmit,
     this.expense,
+    this.index,
   }) : super(key: key);
 
   final Function onSubmit;
   final Expense expense;
+  final int index;
 
   @override
   _ExpenseDialogState createState() => _ExpenseDialogState(expense: expense);
@@ -194,7 +196,8 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    widget.onSubmit(expense);
+                    widget.onSubmit(expense, widget.index);
+                    Navigator.pop(context);
                   }
                 },
               ),
