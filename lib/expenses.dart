@@ -1,3 +1,6 @@
+import 'dart:core' as prefix0;
+import 'dart:core';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +25,32 @@ class _SpenslyState extends State<Spensly> {
     super.initState();
     _db = DatabaseHelper.instance;
     getAllExpenses();
+  }
+
+  String totalSpent() {
+    double totalAmount = 0;
+    if (_expenses.length > 1) {
+      List<double> amounts = _expenses.map((e) => e.amount).toList();
+      totalAmount = amounts.reduce((value, element) => value + element);
+    } else if (_expenses.length == 1) {
+      totalAmount = _expenses[0].amount;
+    }
+    return totalAmount.toStringAsFixed(2);
+  }
+
+  String todayAmountSpent() {
+    DateTime now = DateTime.now();
+    DateTime yesterday = DateTime(now.year, now.month, now.day).subtract(const Duration(seconds: 1));
+    List<Expense> todayExpenses = _expenses.where((Expense e) => e.date.isAfter(yesterday)).toList();
+    double todayAmount = 0;
+    if (todayExpenses.length > 1) {
+      List<double> todayAmounts = todayExpenses.map((e) => e.amount).toList();
+      todayAmount = todayAmounts.reduce((value, element) => value + element);
+    } else if (todayExpenses.length == 1) {
+      todayAmount = todayExpenses[0].amount;
+    }
+
+    return todayAmount.toStringAsFixed(2);
   }
 
   void getAllExpenses() {
@@ -100,13 +129,69 @@ class _SpenslyState extends State<Spensly> {
           Row(
             children: <Widget>[
               Expanded(
-                child: Center( 
-                  heightFactor: 4.0,
-                  child: Text('foo'))
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        "Today",
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                          fontFamily: 'Roboto',
+                          fontSize: 20
+                        ),
+                      ),
+                      heightFactor: 2.0,
+                    ),
+                    Center(
+                      child: Text(
+                        todayAmountSpent(),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.normal,
+                          fontFamily: 'Roboto',
+                          fontSize: 40
+                        ),
+                      ),
+                      heightFactor: 1.1,
+                    ),
+                  ]
+                )
               ),
               Expanded(
-                child: Center( child: Text('bar'))
-              )
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        "All Time",
+                        style: TextStyle(
+                          color: Colors.grey[500],
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                          fontFamily: 'Roboto',
+                          fontSize: 20
+                        ),
+                      ),
+                      heightFactor: 2.0,
+                    ),
+                    Center(
+                      child: Text(
+                        totalSpent(),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.normal,
+                          fontFamily: 'Roboto',
+                          fontSize: 40
+                        ),
+                      ),
+                      heightFactor: 1.1,
+                    ),
+                  ]
+                )
+              ),
             ]
           ),
           Expanded(
