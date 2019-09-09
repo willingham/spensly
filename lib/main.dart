@@ -60,7 +60,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Padding(
+          padding: EdgeInsets.all(7),
+          child: new Image.asset('assets/img/spensly-logo-horizontal.png', fit: BoxFit.cover),
+        ),
+        actions: [
+          IconButton(icon: Icon(Icons.menu), onPressed: () {},)
+        ]
       ),
       body: Spensly(),
 

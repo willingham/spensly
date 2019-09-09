@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData SpenslyTheme = ThemeData(
-  accentColor: Colors.blue,
+  accentColor: SpenslyColors.green,
   accentColorBrightness: Brightness.light,
   brightness: Brightness.light,
   primaryColor: SpenslyColors.green,
