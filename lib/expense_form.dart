@@ -205,6 +205,16 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
                 }
               ),
 
+              // submitted / filed
+              CheckboxListTile(
+                title: Text('Already Submitted'),
+                value: expense.filed,
+                onChanged: (val) {
+                  setState(() =>
+                      expense.filed = val);
+                }
+              ),
+
               // photo area
               GestureDetector(
                 onTap: () => takePhoto(),
