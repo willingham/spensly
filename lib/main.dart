@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spensly/about.dart';
 import 'package:spensly/expenses.dart';
 import 'package:spensly/theme.dart';
 
@@ -60,14 +61,53 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+        centerTitle: true,
         title: Padding(
           padding: EdgeInsets.all(7),
           child: new Image.asset('assets/img/spensly-logo-horizontal.png', fit: BoxFit.cover),
         ),
         actions: [
-          IconButton(icon: Icon(Icons.menu), onPressed: () {},)
+          //IconButton(icon: Icon(Icons.menu), onPressed: () {},)
         ]
       ),
+      drawer: Drawer(
+      // Add a ListView to the drawer. This ensures the user can scroll
+      // through the options in the drawer if there isn't enough vertical
+      // space to fit everything.
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            child: Text('Spensly'),
+            decoration: BoxDecoration(
+              color: SpenslyColors.green,
+            ),
+          ),
+          ListTile(
+            title: Text('Send Report'),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+            },
+          ),
+          ListTile(
+            title: Text('About'),
+            onTap: () {
+              // Update the state of the app.
+              // ...
+              Navigator.of(context).pop();
+              Navigator.of(context, rootNavigator: true).push(
+               MaterialPageRoute<bool>(
+                fullscreenDialog: true,
+                builder: (BuildContext context) => new About(),
+              ),
+            );
+            },
+          ),
+        ],
+      ),
+    ),
       body: Spensly(),
 
  // This trailing comma makes auto-formatting nicer for build methods.
