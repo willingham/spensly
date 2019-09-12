@@ -194,4 +194,32 @@ class DatabaseHelper {
     return await db.update(tableExpense, expense.toMap(),
         where: '$columnId = ?', whereArgs: [expense.id]);
   }
+
+  Future<String> generateCsvString(ids) async {
+    Database db = await database;
+    List<String> columnsToInclude = [columnId, columnName, columnAmount, columnDate, columnVendor, columnFilename, columnFiled, columnCategory];
+    List<Map> maps = await db.query(tableExpense,
+        columns: columnsToInclude,
+        where: '$columnId IN ?', whereArgs: [ids]);
+    
+    String csv = "";
+    int totalAmount = 0;
+
+    // add header row
+    columnsToInclude.forEach((c) => csv += c);
+    csv += '\n';
+
+    // add value rows
+    maps.forEach((e) {
+      totalAmount += e[columnAmount];
+      columnsToInclude.forEach((c) => csv += e[c]);
+      csv += '\n';
+    });
+
+    // add total row
+    csv += "Total Amount: " + totalAmount.toString();
+
+    debugPrint(csv);
+    return csv;
+  }
 }
