@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:csv/csv.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -181,6 +182,11 @@ class DatabaseHelper {
     return [];
   }
 
+  Future<List<Expense>> queryUnsubmittedExpenses() async {
+    List<Expense> expenses = await queryAllExpenses();
+    return expenses.where((e) => !e.filed).toList();
+  }
+
   Future<int> delete(int id) async {
     Database db = await database;
     int numDeleted = await db.delete(tableExpense,
@@ -198,28 +204,30 @@ class DatabaseHelper {
   Future<String> generateCsvString(ids) async {
     Database db = await database;
     List<String> columnsToInclude = [columnId, columnName, columnAmount, columnDate, columnVendor, columnFilename, columnFiled, columnCategory];
+    debugPrint(ids.join(','));
     List<Map> maps = await db.query(tableExpense,
         columns: columnsToInclude,
-        where: '$columnId IN ?', whereArgs: [ids]);
+        where: '$columnId IN (${ids.join(', ')})');
+
     
-    String csv = "";
-    int totalAmount = 0;
+    double totalAmount = 0;
+    List<List<dynamic>> data = [];
 
     // add header row
-    columnsToInclude.forEach((c) => csv += c);
-    csv += '\n';
+    data.add(columnsToInclude);
 
     // add value rows
     maps.forEach((e) {
       totalAmount += e[columnAmount];
-      columnsToInclude.forEach((c) => csv += e[c]);
-      csv += '\n';
+      data.add(columnsToInclude.map((c) => e[c]).toList());
     });
 
     // add total row
-    csv += "Total Amount: " + totalAmount.toString();
+    data.add(["Total Amount: ${totalAmount.toString()}"]);
 
-    debugPrint(csv);
+    String csv = const ListToCsvConverter().convert(data);
+
+    //debugPrint(csv);
     return csv;
   }
 }
