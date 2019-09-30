@@ -194,6 +194,13 @@ class _SpenslyState extends State<Spensly> {
               ),
             ]
           ),
+          _expenses.length > 0 ? Container(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15, 40, 0, 5),
+              child: Text(DateFormat.yMMMMd("en_US").format(_expenses[1].date))
+            ),
+          ) : Text(''),
           Expanded(
             child: ListView.separated(
               itemCount: _expenses.length,
@@ -202,12 +209,12 @@ class _SpenslyState extends State<Spensly> {
                 final next = _expenses[index + 1].date;
                 if (!(me.year == next.year && me.month == next.month && me.day == next.day)) {
                   return Padding(
-                    padding: EdgeInsets.fromLTRB(20, 40, 0, 5),
+                    padding: EdgeInsets.fromLTRB(15, 40, 0, 5),
                     child: Text(
                       DateFormat.yMMMMd("en_US").format(_expenses[index + 1].date))
                   );
                 }
-                return Divider(color: Colors.black);
+                return Divider(color: Colors.black45, indent: 15, endIndent: 15,);
               },
               itemBuilder: (BuildContext ctxt, int index) {
                 return Dismissible(

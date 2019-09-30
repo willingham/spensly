@@ -33,8 +33,13 @@ def parse_KV_file(file, separator='=')
 end
 
 target 'Runner' do
+  # for flutter_email_sender
+  # https://github.com/flutter/flutter/issues/16049#issuecomment-382629492
+  use_frameworks!
+  
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
   # referring to absolute paths on developers' machines.
+  
   system('rm -rf .symlinks')
   system('mkdir -p .symlinks/plugins')
 
