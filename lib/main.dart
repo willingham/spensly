@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:spensly/about.dart';
 import 'package:spensly/expenses.dart';
+import 'package:spensly/submission_helpers.dart';
 import 'package:spensly/theme.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -67,7 +70,21 @@ class _MyHomePageState extends State<MyHomePage> {
           child: new Image.asset('assets/img/spensly-logo-horizontal.png', fit: BoxFit.cover),
         ),
         actions: [
-          //IconButton(icon: Icon(Icons.menu), onPressed: () {},)
+          IconButton(icon: Icon(Icons.send), onPressed: () async {
+            sendEmail();
+            /*
+            final Email email = Email(
+              body: 'Email body',
+              subject: 'Email subject',
+              recipients: ['example@example.com'],
+              cc: ['cc@example.com'],
+              bcc: ['bcc@example.com'],
+              //attachmentPath: '/path/to/attachment.zip',
+            );
+
+            await FlutterEmailSender.send(email);
+            */
+          },)
         ]
       ),
       drawer: Drawer(

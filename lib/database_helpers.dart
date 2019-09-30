@@ -203,7 +203,7 @@ class DatabaseHelper {
 
   Future<String> generateCsvString(ids) async {
     Database db = await database;
-    List<String> columnsToInclude = [columnId, columnName, columnAmount, columnDate, columnVendor, columnFilename, columnFiled, columnCategory];
+    List<String> columnsToInclude = [columnName, columnAmount, columnDate, columnVendor, columnFilename, columnCategory];
     debugPrint(ids.join(','));
     List<Map> maps = await db.query(tableExpense,
         columns: columnsToInclude,
