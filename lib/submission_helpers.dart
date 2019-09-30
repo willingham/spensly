@@ -48,8 +48,6 @@ Hi,
 
 Please find the receipts and itemization of my business expenses attached.  The total amount is \$$totalRequestAmount.
 
-$csvContents
-
 Thanks
 """;
 
