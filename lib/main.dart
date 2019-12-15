@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:spensly/about.dart';
 import 'package:spensly/expenses.dart';
 import 'package:spensly/submission_helpers.dart';
