@@ -198,7 +198,7 @@ class _SpenslyState extends State<Spensly> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: EdgeInsets.fromLTRB(15, 40, 0, 5),
-              child: Text(DateFormat.yMMMMd("en_US").format(_expenses[1].date))
+              child: Text(DateFormat.yMMMMd("en_US").format(_expenses[0].date))
             ),
           ) : Text(''),
           Expanded(
