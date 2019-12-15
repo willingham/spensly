@@ -40,7 +40,7 @@ class MyHomePage extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text('Spensly'),
+            child: new Image.asset('assets/img/spensly-logo-profile.png', fit: BoxFit.contain),
             decoration: BoxDecoration(
               color: SpenslyColors.green,
             ),
