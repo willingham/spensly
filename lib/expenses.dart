@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spensly/database_helpers.dart';
-import 'package:spensly/expense_form.dart';
+import 'package:spensly/expense_dialog.dart';
 
 
 class Spensly extends StatefulWidget {

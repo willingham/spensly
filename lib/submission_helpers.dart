@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:spensly/database_helpers.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:spensly/update_dialog.dart';
 
 
 Future<String> createZipFile(String csvContents, List<File> imageFiles) async {
@@ -34,10 +35,27 @@ Future<String> createZipFile(String csvContents, List<File> imageFiles) async {
   return zipFileName;
 }
 
-
-void sendEmail() async {
+void sendEmail(context) async {
   DatabaseHelper db = DatabaseHelper.instance;
   List<Expense> unsubmittedExpenses = await db.queryUnsubmittedExpenses();
+  if (unsubmittedExpenses.length == 0) {
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text('No Expenses'),
+        content: Text('No unsubmitted expenses available to send.'),
+        actions: [
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+    return;
+  }
   List<int> unsubmittedExpenseIds = unsubmittedExpenses.map((e) => e.id).toList();
   
   String csvContents = await db.generateCsvString(unsubmittedExpenseIds);
@@ -67,5 +85,9 @@ Thanks
   );
 
   await FlutterEmailSender.send(email);
+  showDialog(
+    context: context,
+    child: UpdateDialog(db: db, expenseIds: unsubmittedExpenseIds)
+  );
 
 }
