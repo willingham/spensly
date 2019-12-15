@@ -19,10 +19,12 @@ class UpdateDialog extends StatelessWidget {
     Key key,
     this.db,
     this.expenseIds,
+    this.stateChanged
   }) : super(key: key);
 
   final DatabaseHelper db;
   final List<int> expenseIds;
+  final Function stateChanged;
 
   void markSubmitted(context) async {
     expenseIds.forEach((id) async {
@@ -30,15 +32,14 @@ class UpdateDialog extends StatelessWidget {
       expense.filed = true;
       db.update(expense);
     });
+    stateChanged();
     Navigator.of(context).pop();
-    // @TODO Force reload after return to home
   }
 
   void delete(context) async {
     expenseIds.forEach((id) => db.delete(id));
+    stateChanged();
     Navigator.of(context).pop();
-    // @TODO Force reload after return to home
-
   }
 
   Widget build(BuildContext context) {

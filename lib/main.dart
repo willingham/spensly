@@ -19,7 +19,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _changed = 0;
+
+  stateChanged() {
+    // Increment _changed everytime ui needs to be refreshed.
+    setState(() {
+      _changed += 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +45,7 @@ class MyHomePage extends StatelessWidget {
         ),
         actions: [
           IconButton(icon: Icon(Icons.send), onPressed: () async {
-            sendEmail(context);
+            sendEmail(context, stateChanged);
           },)
         ]
       ),
@@ -62,9 +76,7 @@ class MyHomePage extends StatelessWidget {
         ],
       ),
     ),
-      body: Spensly(),
-
- // This trailing comma makes auto-formatting nicer for build methods.
+      body: Spensly(key: Key(_changed.toString())),
     );
   }
 }

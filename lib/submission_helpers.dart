@@ -35,7 +35,7 @@ Future<String> createZipFile(String csvContents, List<File> imageFiles) async {
   return zipFileName;
 }
 
-void sendEmail(context) async {
+void sendEmail(context, stateChanged) async {
   DatabaseHelper db = DatabaseHelper.instance;
   List<Expense> unsubmittedExpenses = await db.queryUnsubmittedExpenses();
   if (unsubmittedExpenses.length == 0) {
@@ -87,7 +87,7 @@ Thanks
   await FlutterEmailSender.send(email);
   showDialog(
     context: context,
-    child: UpdateDialog(db: db, expenseIds: unsubmittedExpenseIds)
+    child: UpdateDialog(db: db, expenseIds: unsubmittedExpenseIds, stateChanged: stateChanged)
   );
 
 }
