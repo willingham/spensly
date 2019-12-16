@@ -11,6 +11,8 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 
 
@@ -52,9 +54,8 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
 
   void setImageFile() async {
     if (expense.filename != "") {
-      final photoDirectory = await imageDirectory;
       setState(() {
-        imageFile = File(join(photoDirectory, expense.filename));
+        imageFile = File(expense.filename);
       });
       
     }
@@ -75,9 +76,17 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
   @override
   Widget build(BuildContext context) {
 
-    void takePhoto() async {
-      final cameras = await availableCameras();
+    void takePhoto(ImageSource source) async {
+      var image = await ImagePicker.pickImage(source: source);
+      if (image != null) {
+        await setState(() =>
+            expense.filename = image.path);
+        setImageFile();
+      }
+    }
 
+    void takePhotoBak() async {
+      final cameras = await availableCameras();
       // Get a specific camera from the list of available cameras.
       final firstCamera = cameras.first;
       Navigator.push(
@@ -214,20 +223,33 @@ class _ExpenseDialogState extends State<ExpenseDialog> {
                 }
               ),
 
-              // photo area
-              GestureDetector(
-                onTap: () => takePhoto(),
-                child: Container(
-                  width: 100.0,
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    color: Colors.redAccent,
+              ButtonBar(
+                alignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Center(child: Icon(Icons.camera)),
+                    onPressed: () => takePhoto(ImageSource.camera),
                   ),
-                  child: imageFile != null
-                    ? Image.file(imageFile)
-                    : Center(child: Icon(Icons.camera))
-                )
+                  RaisedButton(
+                    child: Center(child: Icon(Icons.photo_album)),
+                    onPressed: () => takePhoto(ImageSource.gallery),
+                  ),
+                ],
+              ),              
+              // photo area
+              Container(
+                width: 100.0,
+                height: 150.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  color: imageFile != null
+                  ? Colors.grey
+                  : Colors.redAccent,
+                ),
+                child: imageFile != null
+                  ? Image.file(imageFile)
+                  : Center(child: Icon(Icons.camera))
               ),
 
               // create button

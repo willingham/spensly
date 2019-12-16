@@ -219,7 +219,12 @@ class DatabaseHelper {
     // add value rows
     maps.forEach((e) {
       totalAmount += e[columnAmount];
-      data.add(columnsToInclude.map((c) => e[c]).toList());
+      data.add(columnsToInclude.map((c) {
+        if (c == columnFilename) {
+          return basename(e[c]);
+        }
+        return e[c];
+      }).toList());
     });
 
     // add total row

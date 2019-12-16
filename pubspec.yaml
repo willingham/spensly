@@ -27,6 +27,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   camera: ^0.5.4
   csv: 4.0.3
+  image_picker: ^0.6.2+3
   sqflite: ^1.0.0
   path: ^1.6.2
   path_provider: ^0.4.1
