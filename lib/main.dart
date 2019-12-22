@@ -1,82 +1,61 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:spensly/about.dart';
-import 'package:spensly/expenses.dart';
-import 'package:spensly/submission_helpers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spensly/theme.dart';
 
+import 'home.dart';
+import 'intro_screen.dart';
 
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+void main() => runApp(Spensly());
+
+class Spensly extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Spensly',
       theme: SpenslyTheme,
-      home: MyHomePage(),
+      home: MainController(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
+class MainController extends StatefulWidget {
+@override
+MainControllerState createState() => new MainControllerState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _changed = 0;
+class MainControllerState extends State<MainController> {
+Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool _seen = (prefs.getBool('seen') ?? false);
 
-  stateChanged() {
-    // Increment _changed everytime ui needs to be refreshed.
-    setState(() {
-      _changed += 1;
+    if (_seen) {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => Home()));
+    } else {
+    prefs.setBool('seen', true);
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => new IntroScreen()));
+    }
+}
+
+@override
+void initState() {
+    super.initState();
+    Timer(new Duration(milliseconds: 200), () {
+    checkFirstSeen();
     });
-  }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: EdgeInsets.all(54),
-          child: new Image.asset('assets/img/spensly-logo-horizontal.png', fit: BoxFit.contain),
-        ),
-        actions: [
-          IconButton(icon: Icon(Icons.send), onPressed: () async {
-            sendEmail(context, stateChanged);
-          },)
-        ]
-      ),
-      drawer: Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: new Image.asset('assets/img/spensly-logo-profile.png', fit: BoxFit.contain),
-            decoration: BoxDecoration(
-              color: SpenslyColors.green,
-            ),
-          ),
-          ListTile(
-            title: Text('About'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-              Navigator.of(context).pop();
-              Navigator.of(context, rootNavigator: true).push(
-               MaterialPageRoute<bool>(
-                fullscreenDialog: true,
-                builder: (BuildContext context) => new About(),
-              ),
-            );
-            },
-          ),
-        ],
-      ),
+@override
+Widget build(BuildContext context) {
+    return new Scaffold(
+    body: Center(
+        child: Text('Loading...'),
     ),
-      body: Spensly(key: Key(_changed.toString())),
     );
-  }
+}
 }
