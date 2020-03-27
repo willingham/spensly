@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spensly/theme.dart';
+//import 'package:spensly/views/intro_screen.dart';
+import 'package:spensly/views/onboarding_circle.dart';
 
 import 'home.dart';
-import 'intro_screen.dart';
+//import 'intro_screen.dart';
 
 
 void main() => runApp(Spensly());
@@ -32,13 +34,19 @@ Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
 
-    if (_seen) {
+    if (!_seen) {
+      debugPrint('if here');
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => Home()));
     } else {
+      debugPrint('else here');
     prefs.setBool('seen', true);
+
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => new IntroScreen()));
+        //MaterialPageRoute(builder: (context) => new IntroScreen()));
+        MaterialPageRoute(builder: (context) => new OnBoardingCircle()));
+        //MaterialPageRoute(builder: (context) => new OnBoarding()));
+
     }
 }
 
@@ -52,10 +60,12 @@ void initState() {
 
 @override
 Widget build(BuildContext context) {
+    
     return new Scaffold(
-    body: Center(
-        child: Text('Loading...'),
-    ),
+      body: Center(
+          child: Text('FLoading...'),
+      ),
     );
+    
 }
 }
