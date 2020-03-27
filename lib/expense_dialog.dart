@@ -5,15 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:spensly/camera.dart';
 import 'package:spensly/database_helpers.dart';
-import 'package:path/path.dart' show join;
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-
 
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
-
-
 
 
 class ExpenseDialog extends StatefulWidget {

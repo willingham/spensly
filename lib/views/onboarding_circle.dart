@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:spensly/theme.dart';
-//import 'package:login_register/ui/login/login.dart';
 import '../home.dart';
 import 'app_colors.dart';
-//import 'package:login_register/utlities/shared_pref_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'intro_widget.dart';
 
 class OnBoardingCircle extends StatefulWidget {
@@ -24,7 +21,6 @@ class _OnBoardingCircleState extends State<OnBoardingCircle> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _init();
   }

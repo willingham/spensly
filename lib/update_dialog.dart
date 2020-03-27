@@ -1,17 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:spensly/camera.dart';
 import 'package:spensly/database_helpers.dart';
-import 'package:path/path.dart' show join;
-
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-
-
-import 'package:camera/camera.dart';
-
 
 
 class UpdateDialog extends StatelessWidget {
@@ -19,7 +8,7 @@ class UpdateDialog extends StatelessWidget {
     Key key,
     this.db,
     this.expenseIds,
-    this.stateChanged
+    this.stateChanged,
   }) : super(key: key);
 
   final DatabaseHelper db;

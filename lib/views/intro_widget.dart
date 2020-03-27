@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
-import 'app_colors.dart';
 
 class IntroWidget extends StatelessWidget {
   const IntroWidget(
